@@ -55,12 +55,7 @@ The regression analysis revealed the following key findings:
 
 - **Standard Deviation**: The standard deviation of the residuals is 0.25, meaning that on average, the predicted mortality rates deviate from the observed rates by only 0.25 units. This low standard deviation indicates that the model provides a good fit to the data.
 
-- **Coefficients**: The coefficients for the independent variables, reflecting their impact on premature age-adjusted mortality, are as follows:
-  - **Adult Smoking (%)**: For each unit increase in the percentage of adult smokers, the mortality rate increases by 0.03 units, suggesting a positive relationship between smoking rates and premature mortality.
-  - **Adult Obesity (%)**: For each unit increase in the percentage of adults classified as obese, the mortality rate decreases by 0.01 units. This negative relationship indicates that higher obesity rates are associated with a slight decrease in mortality rates, although this result is contrary to expectations.
-  - **Physical Inactivity (%)**: For each unit increase in the percentage of physically inactive adults, the mortality rate increases by 0.02 units, indicating that greater physical inactivity is associated with higher mortality rates.
-  - **Diabetics (%)**: For each unit increase in the percentage of adults with diabetes, the mortality rate increases by 0.27 units. This strong positive relationship suggests that higher diabetes rates are associated with significantly higher mortality rates.
-  - **Poor Mental Health Days**: For each additional day of poor mental health reported, the mortality rate increases by 0.17 units, highlighting the impact of mental health on mortality rates.
+The percentage of adults smoking in America is quite high with some states ranging even more than 40% which can be associated with the fact that more than 42 million Americans smoke. It was observed that states in the midwest have really high percentage of population that does not exercise regularly (more than 30% in these states on average). As physical inactivity is the leading cause of obesity, going at this rate 85% of American will surely be obese by 2030. Physical inactivity also had the strongest relation  with premature mortality rate. On comparing the map of obesity with physical inactivity, it was revealed that the states with highest percentage of physical inactivity were also the states with highest percentage of obesity. 
 
 ## Limitations
 
