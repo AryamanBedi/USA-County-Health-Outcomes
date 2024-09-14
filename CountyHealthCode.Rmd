@@ -1,0 +1,400 @@
+---
+title: "Health Outcomes County Level USA"
+author: "Aryaman Bedi"
+date: "2023-06-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Loading the required libraries:
+
+```{r}
+library(arm)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(sf)
+library(mapview)
+library(raster)
+```
+
+Reading the required data for finding analysing the relationship between premature age- adjusted mortality rate of a county with smoking, obesity, physical inactivity, diabetes and poor mental health
+
+```{r}
+data <- read_excel("/Users/bedi/Downloads/DATA5207_Project/Data/Q3 What predicts better health outcomes at the county level in the United States/2018 County Health Rankings Data - v2.xls", sheet = 6)
+
+
+dat <- read_excel("/Users/bedi/Downloads/DATA5207_Project/Data/Q3 What predicts better health outcomes at the county level in the United States/2018 County Health Rankings Data - v2.xls", sheet = 4)
+```
+
+Selecting the required columns (i.e., the five factors mentioned above)
+
+```{r}
+d6 <- data %>%
+  dplyr::select(...1,...2,...3,`Premature age-adjusted mortality`,Demographics)
+
+d4 <- dat %>%
+  dplyr::select(...1,'Poor mental health days','Adult smoking','Adult obesity','Physical inactivity','Diabetes monitoring')
+```
+
+Renaming Columns 
+
+```{r}
+d6 <- d6 %>%
+  rename(FIPS = ...1,
+         State = ...2,
+         County = ...3,
+         Population = Demographics,
+         'Premature age-adjusted mortality (Deaths)' = 'Premature age-adjusted mortality')
+
+d4 <- d4 %>%
+  rename(FIPS = ...1,
+         'Adult smoking (%)' = 'Adult smoking',
+         'Adult obesity (%)' = 'Adult obesity',
+         'Diabetics' = 'Diabetes monitoring',
+         'Physical inactivity (%)' = 'Physical inactivity')
+```
+
+Removing first row from both to avoid repetion of column names in first row before joining both the datasets 
+
+```{r}
+d4 <- d4[-1, ]
+d6 <- d6[-1, ]
+```
+
+Joining both the columns using the FIPS column followed by converting all the columns to numeric datatype 
+
+```{r}
+joined_data <- left_join(d6, d4, by = "FIPS")
+
+joined_data <- joined_data %>%
+  mutate(`Adult smoking (%)` = as.numeric(`Adult smoking (%)`),
+         `Premature age-adjusted mortality (Deaths)` = as.numeric(`Premature age-adjusted mortality (Deaths)`),
+         `Adult obesity (%)` = as.numeric(`Adult obesity (%)`),
+         `Physical inactivity (%)` = as.numeric(`Physical inactivity (%)`),
+         Diabetics = as.numeric(Diabetics),
+         `Poor mental health days` = as.numeric(`Poor mental health days`),
+         `Population` = as.numeric(`Population`))
+
+```
+
+
+Converting Premature Age Adjusted Mortality to Percentage for all the counties
+```{r}
+joined_data$`Premature age-adjusted mortality (Deaths)` <- ((joined_data$`Premature age-adjusted mortality (Deaths)` / joined_data$Population)) * 100
+joined_data$Diabetics <- ((joined_data$Diabetics / joined_data$Population)) * 100
+```
+
+Fitting Linear Regression Model to the data
+
+```{r}
+model <- lm(`Premature age-adjusted mortality (Deaths)` ~ `Adult smoking (%)`+`Adult obesity (%)`+`Physical inactivity (%)`+Diabetics+`Poor mental health days`, data = joined_data)
+display(model)
+```
+
+Creating tables to summarise key aspects of results obtained from linear regression model
+
+```{r}
+# Load required package
+library(knitr)
+
+# Create a data frame for the table
+model_summary <- data.frame(
+  coef.est = c(-0.49, 0.03, -0.01, 0.02, 0.27, 0.17),
+  coef.se = c(0.04, 0.00, 0.00, 0.00, 0.01, 0.01),
+  row.names = c("(Intercept)", "`Adult smoking (%)`", "`Adult obesity (%)`", "`Physical inactivity (%)`", "Diabetics (%)", "`Poor mental health days`")
+)
+
+# Create a data frame for the model metrics
+model_metrics <- data.frame(
+  n = 3062,
+  k = 6,
+  `residual sd` = 0.25,
+  `R-Squared` = 0.66
+)
+
+# Print the summary table
+kable(model_summary, caption = "Model Summary") %>%
+  kable_styling()
+
+# Print the model metrics
+kable(model_metrics, caption = "Model Metrics") %>%
+  kable_styling()
+
+```
+
+Saving the tables as csv files 
+
+```{r}
+# Write the tables to csv files
+write.csv(model_summary, "model_summary.csv", row.names = TRUE)
+write.csv(model_metrics, "model_metrics.csv", row.names = FALSE)
+```
+
+Creating scatter plot with linear regression line analysing premature age adjusted mortality with smoking
+
+```{r}
+plot1 <- ggplot(data = joined_data, aes(x = `Adult smoking (%)`, y = `Premature age-adjusted mortality (Deaths)`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color='brown') +
+  labs(x = "Adult Smoking (%)", y = "Premature Age Mort.")
+```
+
+Creating scatter plot with linear regression line analysing premature age adjusted mortality with obesity
+
+```{r}
+plot2 <- ggplot(data = joined_data, aes(x = `Adult obesity (%)`, y = `Premature age-adjusted mortality (Deaths)`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color='brown') +
+  labs(x = "Adult Obesity (%)", y = "Premature Age Mort.")
+```
+
+Creating scatter plot with linear regression line analysing premature age adjusted mortality with physical inactivity
+
+```{r}
+plot3 <- ggplot(data = joined_data, aes(x = `Physical inactivity (%)`, y = `Premature age-adjusted mortality (Deaths)`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color='brown') +
+  labs(x = "Phycial Inactivity (%)", y = "Premature Age Mort.")
+```
+
+Creating scatter plot with linear regression line analysing premature age adjusted mortality with diabetes 
+
+```{r}
+plot4 <- ggplot(data = joined_data, aes(x = `Diabetics`, y = `Premature age-adjusted mortality (Deaths)`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color='brown') +
+  labs(x = "Diabetics (%)", y = "Premature Age Mort.")
+```
+
+Creating scatter plot with linear regression line analysing premature age adjusted mortality with poor mental health days
+
+```{r}
+plot5 <- ggplot(data = joined_data, aes(x = `Poor mental health days`, y = `Premature age-adjusted mortality (Deaths)`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color='brown') +
+  labs(x = "Poor mental health days", y = "Premature Age Mort.")
+```
+
+Combing all the 5 plots together
+
+```{r}
+library(patchwork)
+combined_plots <- plot1 + plot2 + plot3 + plot4 + plot5 +
+  plot_layout(nrow = 2)
+
+# Display the combined plots
+combined_plots
+ggsave("combined_plots.png", combined_plots)
+```
+
+
+Calculating Pearson Correlation Coefficient for Premature Age Adjusted Mortality (P.A.A.M) and Smoking 
+
+```{r}
+cor(joined_data$`Premature age-adjusted mortality (Deaths)`, joined_data$`Adult smoking (%)`, use = "pairwise.complete.obs")
+```
+
+Calculating Pearson Correlation Coefficient for Premature Age Adjusted Mortality (P.A.A.M) and Obesity
+
+```{r}
+cor(joined_data$`Premature age-adjusted mortality (Deaths)`, joined_data$`Adult obesity (%)`, use = "pairwise.complete.obs")
+```
+
+Calculating Pearson Correlation Coefficient for Premature Age Adjusted Mortality (P.A.A.M) and Physical Inactivity
+
+```{r}
+cor(joined_data$`Premature age-adjusted mortality (Deaths)`, joined_data$`Physical inactivity (%)`, use = "pairwise.complete.obs")
+```
+
+Calculating Pearson Correlation Coefficient for Premature Age Adjusted Mortality (P.A.A.M) and Diabetes
+
+```{r}
+cor(joined_data$`Premature age-adjusted mortality (Deaths)`, joined_data$`Diabetics`, use = "pairwise.complete.obs")
+```
+
+Calculating Pearson Correlation Coefficient for Premature Age Adjusted Mortality (P.A.A.M) and Poor Mental Health Days
+
+```{r}
+cor(joined_data$`Premature age-adjusted mortality (Deaths)`, joined_data$`Poor mental health days`, use = "pairwise.complete.obs")
+```
+
+Creating a table displaying all the correlation coefficients 
+
+```{r}
+# Load required package
+library(knitr)
+
+# List of independent variables
+independent_vars <- c("Adult smoking (%)", 
+                      "Adult obesity (%)", 
+                      "Physical inactivity (%)", 
+                      "Diabetics", 
+                      "Poor mental health days")
+
+# Dependent variable
+dependent_var <- "Premature age-adjusted mortality (Deaths)"
+
+# Calculate correlations
+correlations <- sapply(independent_vars, function(var) {
+  cor(joined_data[[dependent_var]], joined_data[[var]], use = "pairwise.complete.obs")
+})
+
+# Create a data frame for the table
+correlation_df <- data.frame(
+  Independent_Variables = independent_vars,
+  Correlation = correlations
+)
+correlation_df$Independent_Variables[4] <- "Diabetics (%)"
+colnames(correlation_df) <- c("Predictors","Correlation with P.A.A.R.M")
+
+# Display as a table in RMarkdown
+kable(correlation_df, digits = 2)
+```
+
+Saving the above mentioned tables as a csv file
+
+```{r}
+write.csv(correlation_df, "correlation_df.csv", row.names = FALSE)
+```
+
+```{r}
+saveRDS(correlation_df, "correlation_df.rds")
+```
+
+
+
+Reading the shapefile dataset to display the effect of above factors on P.A.A.M of counties throughout the nation
+
+```{r}
+sp <- st_read("/Users/bedi/Downloads/DATA5207_Project/Data/US shapefiles/cb_2016_us_county_20m.shp")
+
+spf <- sp %>%
+  dplyr::select(NAME, geometry)
+
+spf <- spf %>%
+  rename(County = NAME)
+```
+
+Joining the dataset with shapefiles data
+```{r}
+final_data <- left_join(joined_data, spf, by = "County")
+```
+
+Removing the duplicate county names from the final joined dataset
+
+```{r}
+# Check for duplicate county names in the spatial dataset
+duplicate_county_spf <- spf[duplicated(spf$county), "County"]
+print(duplicate_county_spf)
+
+# Check for duplicate county names in the joined data
+duplicate_county_joined <- joined_data[duplicated(joined_data$County), "County"]
+print(duplicate_county_joined)
+
+# Remove duplicate county names from the joined data (if necessary)
+joined_data_unique <- joined_data[!duplicated(joined_data$County), ]
+
+# Perform the join again using the unique joined data
+joined_dat <- left_join(spf, joined_data_unique, by = c("County" = "County"))
+```
+
+Visualising effect of poor mental health days on counties in USA using mapview()
+
+```{r}
+map_poor <- mapview(joined_dat, zcol = "Poor mental health days", map.types = "OpenStreetMap")
+```
+
+```{r}
+map_poor
+```
+
+Visualising effect of smoking on counties in USA using mapview()
+
+```{r}
+map_smo <- mapview(joined_dat, zcol = "Adult smoking (%)", map.types = "OpenStreetMap")
+```
+
+```{r}
+map_smo
+```
+
+Visualising effect of obesity on counties in USA using mapview()
+
+```{r}
+map_ob <- mapview(joined_dat, zcol = "Adult obesity (%)", map.types = "OpenStreetMap")
+```
+
+```{r}
+map_ob
+```
+
+Visualising effect of phsycial inactvity on counties in USA using mapview()
+
+```{r}
+map_phy <- mapview(joined_dat, zcol = "Physical inactivity (%)", map.types = "OpenStreetMap")
+```
+
+```{r}
+map_phy
+```
+
+Visualising effect of diabetes on counties in USA using mapview()
+
+```{r}
+map_dia <- mapview(joined_dat, zcol = "Diabetics", map.types = "OpenStreetMap")
+```
+
+```{r}
+map_dia
+```
+
+Visualising premature age adjusted mortality rates on counties in USA using mapview()
+
+```{r}
+map_age <- mapview(joined_dat, zcol = "Premature age-adjusted mortality (Deaths)", map.types = "OpenStreetMap")
+```
+
+```{r}
+map_age
+```
+
+Creating maps combining premature age adjusted mortality of counties along with all the factors individually
+
+```{r}
+map_1 <- map_age + map_smo
+map_1
+```
+
+
+```{r}
+map_2 <- map_age + map_phy
+map_2
+```
+
+```{r}
+map_3 <- map_age + map_ob
+map_3
+```
+
+```{r}
+map_4 <- map_age + map_dia
+map_4
+```
+
+```{r}
+map_5 <- map_age + map_poor
+map_5
+```
+
+
+
+
+
+
+
+
+

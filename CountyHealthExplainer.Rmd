@@ -1,0 +1,190 @@
+---
+title: "Finding Predictors for Better Health Outcomes at the County Level in United States"
+author: "490306336"
+output: pdf_document
+---
+
+# Introduction 
+
+Despite all the technological innovations in the healthcare industry, mankind has still not been able to solve the menace of premature death. The study primarily aims to  find predictors for better health outcomes at the county level in United States. C. Everett Koop, the former United States Surgeon General and public health administrator had once said that health care is vital to all of us some of the time but public health is vital to us all of the time. America, the land of opportunity for many, is slowly turning itself into a land of the ailing. Premature age-adjusted mortality is an effective tool of measuring public health in a particular area. It helps in identifying the leading factors of premature deaths. Premature deaths are often linked with chronic diseases, sedentary lifestyle and mental health. Thus, this study aims to analyse and establish an extensive relationship between premature age-adjusted mortality rate of a county with smoking, obesity, physical inactivity, diabetes and poor mental health. 
+
+A linear regression model was used to find the relationship between the predictors (independent variables) and the premature age-adjusted mortality. It was concluded that the predictors were able to explain 66% of the variation in the premature age mortality for a county in USA. Additionally, correlation coefficients were used to assess the strength and direction of the linear relationship between dependent and independent variable individually. A strong positive correlation was observed for each of the variables, ranging from 0.48 to 0.64.
+
+\vspace{6mm}
+
+# Literature and theory
+
+Christian Lange, a Norwegian historian and Nobel Peace Prize winner, had once said that technology is a useful servant but a dangerous master. No other field has evolved as much as technology in the 21st century. Technology was supposed to make the lives of humans simpler and easier. Cut to the present and the lives of humans revolve around technology. Premature age-adjusted mortality measures the number of deaths of residents below age of 75 per 100,000 population and is a vital tool for predicting health outcomes of an area. Social media with its repetitive reels and addictive algorithms has led to a mental health crisis in the teenagers in America. One of the leading causes of premature death that can be prevented is suicide among teenagers. Another preventable cause of premature deaths, smoking, harms almost all body organs. Excessive use of technology is often associated with a sedentary lifestyle. Physical activity has been replaced by binge-watching of shows and content at home. Sedentary lifestyle and an unhealthy diet leads to obesity and chronic diseases like diabetes which are extremely harmful for the human body.
+
+Studies conducted by the CDC reveal that around 42 million Americans smoke and more than 16 million of them are living with smoking-related illness. Smoking is associated with an average loss of 10 years of life expectancy [1]. Consuming tobacco that contains carcinogens and various other toxic chemicals leads to cancer and heart related diseases. Researchers believe that various countries will be facing an epidemic of smoking tobacco related diseases in the coming decade or two. Poor mental health can have a significant impact on the premature age mortality both directly and indirectly. Suicide (poor mental health usually the root cause) is the second leading cause of death among young adults and as per the data of World Health Organisation, it contributes to 1.5% of all mortality, higher than malaria and breast cancer. Individually, people can resort to substance abuse and neglect their physical health completely in the long run. 
+
+Regular physical activity has numerous health benefits like quality sleep, weight management and les chances of depression and anxiety. Physical inactivity is the leading cause of chronic diseases like obesity and type 2 diabetes. It leads to a better immune system and keeps the functioning of organs in check. A study conducted by CDC on death associated with physical activity in US concluded that 8.3% of premature deaths in adults aged 25 and over is attributed to inadequate levels of physical activity [9]. Obesity is a disorder related to excessive body fat that leads to a lot of health problems that can severely impact the premature age mortality rate. Obesity increases the risk of diabetes and heart diseases in individuals and might often lead to depression and anxiety in adults due to their appearance. A research conducted on the epidemiology of obesity [11] projects 85% of American adults being overweight or obese by 2030. A diet having excessive quantities of sugar increase the risk of chronic diseases like diabetes and premature death. In the last four decades, diabetes rates have shot up in developed countries such as USA due to change in dietary habits and an acute lack of exercise. 
+
+\vspace{6mm}
+
+# Data and methodology 
+
+The data analysed in this study is sourced from County Health Rankings and Roadmaps (CHR&R), a program of the University of Wisconsin Population Health Institute. The program is also supported by Robert Wood Johnson Foundation to promote health equity in the country. It provides data on premature age-adjusted mortality for fifty counties of America along with the leading health indicators associated with it. 
+
+The dependent variable for this study will be premature age-adjusted mortality, i.e., a measure of number of deaths of residents below age of 75 per 100,000 people in the county. Analysing the premature age adjusted mortality can be extremely beneficial for the government. It helps in identifying leading health indicators for premature deaths in a county and the policymakers and officials can try to eradicate the causes. A literature review was conducted to select the five independent variables and their effect on premature age adjusted mortality. The variables selected are: adult smoking, adult obesity, physical inactivity, poor mental health days and diabetes. 
+
+As the primary motive of this study is to find the relationship between the dependent and independent variable, regression analysis model will be used. Considering that all the variables related to this study (dependent and independent) are numeric and continuous variables, this study uses linear regression model. It will help in analysing the relationship between the two variables and conclude whether the health indicator is a significant predictor or not. Linear regression will also help in explaining any variance in premature age-adjusted mortality based on the independent variables.
+
+For finding the relationship between the dependent variable and independent variables, the relevant data will be joined together (from different sheets) using a left join. The data has provided total number of premature deaths in a county. The total population of that county will be used to convert the number of deaths to mortality rate as otherwise the population of a county can severely impact the deaths (higher deaths for more populous county) and lead to bias in the analysis. Similarly as three of the independent variables are given as a percentage, the fourth variable (diabetics) will also be converted to a percentage for an appropriate comparison across the counties. This will be followed by visualising the relationship of our dependent variable vs independent variables (using scatter plots). Correlation coefficients will be computed pairwise. After the regression model is run on the variables, the dataset from above will be joined with the shape file data of USA based on the name of the county. This will help in visualising the predictors and their effect on counties with the help of interactive maps. 
+
+A major limitation of the study is that predictors will be analysed based on premature age mortality data collected from 2018 to 2020. A complete healthcare collapse was observed to due Covid-19. The pandemic led to major change in people’s lives and daily routines and thus, the analysis might not be useful for policymakers to try and eradicate leading causes of premature deaths. Some variables like poor mental health days, smoking and obesity are self-reported which might have some bias. Also, the study uses a limited number of predictors so the final result of the linear regression model might not be able to completely explain variation in premature age-adjusted mortality.
+
+\vspace{6mm}
+
+# Results
+
+- Scatter-plot for premature age-adjusted mortality vs independent variables:
+
+```{r, echo = FALSE}
+knitr::include_graphics("/Users/bedi/Downloads/DATA5207_Project/combined_plots.png")
+```
+
+- Assessing Predictors Relationship with Premature Age-Adjusted Mortality Rate (P.A.A.R.M) - Table for Correlation Coefficients:
+
+```{r, echo = FALSE}
+library(knitr)
+correlation_df <- read.csv("/Users/bedi/Downloads/DATA5207_Project/correlation_df.csv")
+kable(correlation_df, digits = 2)
+```
+
+
+To analyse the individual relationship of selected independent variables with the dependent variables, the data was visualised using scatter plots. Line of best fit was used to identify patterns and direction of the relationship. It was observed from the scatter-plot that the points of data are grouped tightly around the trend line indicating a strong positive relationship for all the variables. The trend line also helped in identifying the outliers for each variable (very few). It was concluded that premature age adjusted mortality increased with an increase in all the independent variables and the highest proportion of increase was associated with physical inactivity and lowest proportion of increase was associated with obesity. Additionally, correlation coefficient, a statistical measure of strength of relationship between two linear variables, were calculated pairwise. The coefficients, similar to scatter plots, provide further evidence that a strong positive relationship exists between the selected variables, with the weakest association observed for obesity and strongest for physical inactivity. 
+
+- Regression Model Output
+
+i) Model Summary
+
+```{r, echo=FALSE}
+library(knitr)
+model_summary <- read.csv("/Users/bedi/Downloads/DATA5207_Project/model_summary.csv")
+kable(model_summary, digits = 2)
+```
+
+
+ii) Model Metrics
+
+```{r, echo=FALSE}
+library(knitr)
+model_summary <- read.csv("/Users/bedi/Downloads/DATA5207_Project/model_metrics.csv")
+kable(model_summary, digits = 2)
+```
+
+
+The linear regression model was performed on a sample size of 3062 observations (n=3062) and the model had 6 parameters (5 independent variables and 1 intercept). It was concluded from the regression model that except for obesity all the remaining variables had a positive relationship with premature age-adjusted mortality, i.e., the mortality rate increased with an increase in smoking, physical inactivity, diabetes, and poor mental health days.
+R-squared value was observed to be relatively high (0.66), indicating that the selected five predictors have a significant impact on the premature age-adjusted mortality rate and can explain 66% of the variation in the mortality rate. A significantly low sd (0.25) indicated that the predicted values by using the model are only 0.25 units off the observed values on average. Provided all the other variables remain constant, the dependency of independent variables and mortality rate associated with premature deaths can be explained with the help of coef.est as followed:
+
+i) For a unit increase in variable ‘Adult smoking (%)’, the mortality rate increases by 0.03 times
+ii) For a unit increase in variable 'Adult obesity (%)', the mortality rate decreases by 0.01 times
+iii) For a unit increase in variable ‘Physical Inactivity (%)’, the mortality rate increases by 0.02 times
+iv) For a unit increase in variable ‘Diabetics (%)’, the mortality rate increases by 0.27 times
+v) For a unit increase in variable ‘Poor mental health days', the mortality rate increases by 0.17 times
+
+
+
+- Premature age-adjusted mortality for US counties:
+
+```{r, out.width = "90%", out.height = "90%", fig.align = 'center', echo =FALSE}
+knitr::include_graphics("/Users/bedi/Downloads/DATA5207_Project/age_map.png")
+```
+
+
+
+Regression model was followed by creating interactive visualisations of spatial data. To find effect of predictors and premature age-adjusted mortality at the the county level, mapview package was used to plot the required visualisations. From the above visualisation it can be observed that the premature age mortality rate is significantly higher in the southeastern counties of America (Mississippi, Tennessee, Kansas) and slightly higher in counties located in west near Oregon. 
+
+- MAP - 1: Premature age-adjusted mortality vs Adult Smoking (%) for US counties 
+
+```{r, out.width = "90%", out.height = "90%", fig.align = 'center', echo =FALSE}
+knitr::include_graphics("/Users/bedi/Downloads/DATA5207_Project/smo_age_map.png")
+```
+
+- MAP - 2: Premature age-adjusted mortality vs Physical Inactivity (%) for US counties
+
+```{r, out.width = "90%", out.height = "90%", fig.align = 'center', echo =FALSE}
+knitr::include_graphics("/Users/bedi/Downloads/DATA5207_Project/phy_age_map.png")
+```
+
+- MAP - 3: Premature age-adjusted mortality vs Adult Obesity (%) for US counties
+
+```{r, out.width = "90%", out.height = "90%", fig.align = 'center', echo =FALSE}
+knitr::include_graphics("/Users/bedi/Downloads/DATA5207_Project/obe_age_map.png")
+```
+
+- MAP - 4: Premature age-adjusted mortality vs Diabetic (%) for US counties
+
+```{r, out.width = "90%", out.height = "90%", fig.align = 'center', echo =FALSE}
+knitr::include_graphics("/Users/bedi/Downloads/DATA5207_Project/dia_age_map.png")
+```
+
+- MAP - 5: Premature age-adjusted mortality vs Poor Mental Health Days for US counties
+
+```{r, out.width = "90%", out.height = "90%", fig.align = 'center', echo =FALSE}
+knitr::include_graphics("/Users/bedi/Downloads/DATA5207_Project/poor_age_map.png")
+```
+
+All the independent variables were overlayed with premature age-adjusted mortality. Overlaying helps if identifying correlation between two variables based on the county spatial data and can often help in detecting patterns or hotspots for the data. 
+
+From the first map, it can be concluded that the smoking percentage of adults is significantly higher in the southern counties of USA (near Nashville, Florence and Memphis). Compared to the south and mid region of US, the western states have comparatively (except majorly Nevada and Las Vegas) lower premature age mortality rates as well as a lower population that smokes. The map shows that in counties with high smoking percentage, the premature age-adjusted mortality’s found to be higher. The colour scheme of the two variables helped in concluding that adult smoking has a strong positive effect on premature age mortality rate of a county. 
+
+From the second map, it is clearly visible that the counties in south and east have very high levels of physical inactivity (higher than 30% on average) especially near Richmond. The rate of physical inactivity decreases drastically as one moves towards the west coast of America. With the map, it can be concluded that an increase in physical inactivity leads to an increase in premature mortality rate and the association between the two variables is stronger than smoking and premature mortality rate. 
+
+The third map is almost identical to the second map. One reason for this can be that the root cause of obesity is physical inactivity and thus, it can be concluded from the map that counties in the south and mid-east suffer from high rates of obesity and in turn, premature mortality rate. Additionally, obesity looks like a slightly bigger menace than physical inactivity as it has spread some counties up in the north as well. With the colour scheme overlaying each other, it can be observed that the relationship between the two variables is the weakest among all. 
+
+From the fourth map, it can be said that the average percentage of diabetics throughout the county is more or less constant. Premature mortality rate is slightly higher in the southern and western states but very low as compared to the previous three variables. The fifth map indicates that mental health is a problem throughout the country as no particular area can be singled out that on average has a significant high number of days with poor mental health. The overlayed map helps in concluding that premature age mortality increases with worsening mental health. 
+
+NOTE: A limitation of using mapview is that it is not compatible with pdf so the interactive information display feature is disregarded altogether.
+
+\vspace{6mm}
+
+# Conclusion 
+
+It was concluded from the linear model that the selected 5 predictors, namely smoking, obesity, poor mental health days, physical inactivity and diabetes could explain 66% of variation that happens with the premature age mortality in US counties. Interactive visualisations of spatial data helped in identifying that states located in the midwest and south of United States had a significantly higher premature age-adjusted mortality rate (near Kansas  Tennessee and Texas). 
+
+The percentage of adults smoking in America is quite high with some states ranging even more than 40% which can be associated with the fact that more than 42 million Americans smoke. It was observed that states in the midwest have really high percentage of population that does not exercise regularly (more than 30% in these states on average). As physical inactivity is the leading cause of obesity, going at this rate 85% of American will surely be obese by 2030. Physical inactivity also had the strongest relation  with premature mortality rate. On comparing the map of obesity with physical inactivity, it was revealed that the states with highest percentage of physical inactivity were also the states with highest percentage of obesity. 
+
+One of the major limitations of this project is the number of variables used as predictors. There might be predictors that have a more significant impact on premature age-adjusted mortality that were not included in this study. The data collection process might have self-reporting bias. Additionally, mapview package comes with limited customisations (thus, attached as images in pdf) and takes a heavy toll on the system resources and performance. 
+
+\vspace{6mm}
+
+# Bibliography 
+
+The referencing style followed for this report is APA (7). 
+
+1) West, R. (2017). Tobacco smoking: Health impact, prevalence, correlates and interventions. Psychology & Health, 32(8), 1018–1036. NCBI. https://doi.org/10.1080/08870446.2017.1325890
+
+2) Saha, S. P., Bhalla, D. K., Whayne, T. F., & Gairola, C. (2007). Cigarette smoke and adverse health effects: An overview of research trends and future needs. The International Journal of Angiology : Official Publication of the International College of Angiology, Inc, 16(3), 77–83. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2733016/
+
+3) Grady, D. (2015, February 11). Smoking’s Toll on Health Is Even Worse Than Previously Thought, a Study Finds. The New York Times. https://www.nytimes.com/2015/02/12/health/smokings-health-toll- worse-than-previously-thought-study-says.html
+
+4) Lake, J. (2017). Urgent Need for Improved Mental Health Care and a More Collaborative Model of Care. The Permanente Journal, 21(2017), 17–24. https://doi.org/10.7812/tpp/17-024
+
+5) Martinez-Ales, G., Hernandez-Calle, D., Khauli, N., & Keyes, K. M. (2020). Why Are Suicide Rates Increasing in the United States? Towards a Multilevel Reimagination of Suicide Prevention. Current Topics in Behavioral Neurosciences, 46, 1–23. https://doi.org/10.1007/7854_2020_158
+
+6) Brådvik, L. (2018). Suicide Risk and Mental Disorders. International Journal of Environmental Research and Public Health, 15(9), 2028. https://doi.org/10.3390/ijerph15092028
+
+7) Richtel, M., & Flanagan, A. (2022, April 24). “It’s Life or Death”: The Mental Health Crisis Among U.S. Teens. The New York Times. https://www.nytimes.com/2022/04/23/health/mental-health-crisis-teens.html
+
+8) An, R., Xiang, X., Yang, Y., & Yan, H. (2016). Mapping the Prevalence of Physical Inactivity in U.S. States, 1984-2015. PLOS ONE, 11(12), e0168175. https://doi.org/10.1371/journal.pone.0168175
+
+9) Carlson, S. A., Adams, E. K., Yang, Z., & Fulton, J. E. (2018). Percentage of Deaths Associated With Inadequate Physical Activity in the United States. Preventing Chronic Disease, 15. https://doi.org/10.5888/pcd18.170354
+
+10) Ali, S. (2022, January 31). A quarter of US adults are physically inactive: CDC report. The Hill. https://thehill.com/changing-america/well-being/longevity/592061-a-quarter-of-us-adults-are-physically- inactive-cdc/
+
+11) Hruby, A., & Hu, F. B. (2015). The Epidemiology of Obesity: A Big Picture. PharmacoEconomics, 33(7), 673–689. ncbi. https://doi.org/10.1007/s40273-014-0243-x
+
+12) D’Souza, M. J., Bautista, R. C., & Wentzien, D. E. (2018). Data Talks: Obesity-Related Influences on US Mortality Rates. Research in Health Science, 3(3), 65–78. https://doi.org/10.22158/rhs.v3n3p65
+
+13) Glenza, J. (2017, November 30). More than half of American children set to be obese by 35, study finds. The Guardian. https://www.theguardian.com/society/2017/nov/30/more-than-half-of-american-children- set-to-be-obese-by-age-35-study-finds
+
+14) Trikkalinou, A., Papazafiropoulou, A. K., & Melidonis, A. (2017). Type 2 diabetes and quality of life. World Journal of Diabetes, 8(4), 120. https://doi.org/10.4239/wjd.v8.i4.120
+
+15) Rosenquist, K. J., & Fox, C. S. (2018). Mortality Trends in Type 2 Diabetes (C. C. Cowie, S. S. Casagrande, A. Menke, M. A. Cissell, M. S. Eberhardt, J. B. Meigs, E. W. Gregg, W. C. Knowler, E. Barrett-Connor, D. J. Becker, F. L. Brancati, E. J. Boyko, W. H. Herman, B. V. Howard, K. M. V. Narayan, M. Rewers, & J. E. Fradkin, Eds.). PubMed; National Institute of Diabetes and Digestive and Kidney Diseases (US). https://www.ncbi.nlm.nih.gov/books/NBK568010/
+
+16) Nast, C. (2015, September 8). How Much Harm Can Sugar Do? The New Yorker. https://www.newyorke r.com/culture/culture-desk/how-much-harm-can-sugar-do
+
+17) The Nobel Peace Prize 1921. (n.d.). NobelPrize.org. https://www.nobelprize.org/prizes/peace/1921/lange/biographical/
+
