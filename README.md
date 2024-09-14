@@ -47,6 +47,21 @@ The data analyzed in this study is sourced from County Health Rankings and Roadm
 5. **Visualization**:
    - Use the shapefile data to create interactive maps that visualize the predictors and their effects on county-level health outcomes.
 
+## Results
+
+The regression analysis revealed the following key findings:
+
+- **Model Fit**: The R-squared value of the model is 0.66, indicating that the selected predictors explain 66% of the variation in the premature age-adjusted mortality rate. This relatively high R-squared value suggests that the model captures a significant portion of the variability in mortality rates.
+
+- **Standard Deviation**: The standard deviation of the residuals is 0.25, meaning that on average, the predicted mortality rates deviate from the observed rates by only 0.25 units. This low standard deviation indicates that the model provides a good fit to the data.
+
+- **Coefficients**: The coefficients for the independent variables, reflecting their impact on premature age-adjusted mortality, are as follows:
+  - **Adult Smoking (%)**: For each unit increase in the percentage of adult smokers, the mortality rate increases by 0.03 units, suggesting a positive relationship between smoking rates and premature mortality.
+  - **Adult Obesity (%)**: For each unit increase in the percentage of adults classified as obese, the mortality rate decreases by 0.01 units. This negative relationship indicates that higher obesity rates are associated with a slight decrease in mortality rates, although this result is contrary to expectations.
+  - **Physical Inactivity (%)**: For each unit increase in the percentage of physically inactive adults, the mortality rate increases by 0.02 units, indicating that greater physical inactivity is associated with higher mortality rates.
+  - **Diabetics (%)**: For each unit increase in the percentage of adults with diabetes, the mortality rate increases by 0.27 units. This strong positive relationship suggests that higher diabetes rates are associated with significantly higher mortality rates.
+  - **Poor Mental Health Days**: For each additional day of poor mental health reported, the mortality rate increases by 0.17 units, highlighting the impact of mental health on mortality rates.
+
 ## Limitations
 
 - **Time Frame**: The analysis is based on data collected from 2018 to 2020. The COVID-19 pandemic caused significant disruptions, which may affect the accuracy and relevance of the findings.
